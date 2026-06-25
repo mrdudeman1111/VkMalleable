@@ -1,0 +1,11 @@
+[requires]
+glm/1.0.1
+glfw/3.4
+tinygltf/2.9.7
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout
