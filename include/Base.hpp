@@ -4,10 +4,6 @@
 
 #include <iostream>
 #include <vector>
-#include <vulkan/vulkan_core.h>
-
-/* 32 mb */
-#define PAGE_SIZE 32000000
 
 /* Forward declarations for everything in this file */
 namespace Wrappers
