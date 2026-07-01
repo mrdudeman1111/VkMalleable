@@ -12,5 +12,19 @@ file(GLOB_RECURSE VKMALLSRC
 
 add_library(VkMall SHARED ${VKMALLSRC})
 
-target_include_directories(VkMall PRIVATE ${CMAKE_SOURCE_DIR}/include Vulkan::Headers)
+target_include_directories(VkMall PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/include>
+    Vulkan::Headers)
+
 target_link_libraries(VkMall Vulkan::Vulkan glfw glm::glm TinyGLTF::TinyGLTF)
+
+install(TARGETS VkMall EXPORT VkMallTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.hpp")
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/Examples)

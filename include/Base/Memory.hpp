@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Base/Memory.hpp"
 #include "Base/Enums.hpp"
+#include "Base/VulkanObject.hpp"
 
 /* 32 mb */
 #define PAGE_SIZE 32000000
@@ -10,13 +10,19 @@ namespace VkMall
 {
     namespace Base
     {
+        // Forward declared for allocator.
+        class Buffer;
+        class Texture;
+
+        class Allocator;
+
         //! A class that encapsulates an Allocation on a VkMemory Object.
         /*!
         This class wraps Allocations on shared VkMemory Obects. These VkDeviceMemory Objects are handled by Pages, which are managed by Allocators. The Interface for Allocators is implemented by the Allocator class. This struct handles binding of vulkan resources to it, it also stores information on Offset, size, Alignment requirements (retrieved from VkMemoryRequirements). Another struct is planned that will wrap this struct into an object usable by the allocator, then this struct will be passed to objects and runtimes requesting Allocations for resources, this struct will be stripped down quite a bit for convenience.
         */
         class Allocation : VulkanObject
         {
-            // friend Allocator;
+            friend Allocator;
             // friend Page;
 
         public:
@@ -79,8 +85,8 @@ namespace VkMall
             Allocator() { DeviceLocalPages = {}; HostVisiblePages = {}; }
             ~Allocator() {}
 
-            virtual vulkan::Buffer* CreateBuffer(size_t Size, VkBufferUsageFlags Usage = 0) = 0;
-            virtual vulkan::Texture* CreateImage(VkExtent2D Size, VkFormat Format, VkImageUsageFlags Usage, VkSampleCountFlagBits Samples) = 0;
+            virtual Buffer* CreateBuffer(size_t Size, VkBufferUsageFlags Usage = 0) = 0;
+            virtual Texture* CreateImage(VkExtent2D Size, VkFormat Format, VkImageUsageFlags Usage, VkSampleCountFlagBits Samples) = 0;
 
             virtual Allocation* Allocate(VkBuffer& Buffer, Enums::eMemoryType MemType) = 0;
             virtual Allocation* Allocate(VkImage& Image, Enums::eMemoryType MemType) = 0;
